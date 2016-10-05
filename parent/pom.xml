@@ -69,7 +69,7 @@
 
     <scm>
         <url>scm:git:git@github.com:zcjava/netty_apps.git</url>
-        <connection>git@github.com:zcjava/netty_apps.git</connection>
+        <connection>scm:git:git@github.com:zcjava/netty_apps.git</connection>
         <tag>netty_app-parent</tag>
     </scm>
 
