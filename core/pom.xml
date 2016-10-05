@@ -31,7 +31,7 @@
     <scm>
         <url>scm:git:git@github.com:zcjava/netty_apps.git</url>
         <connection>scm:git:git@github.com:zcjava/netty_apps.git</connection>
-        <tag>core-1.0</tag>
+        <tag>netty_app-core</tag>
     </scm>
 
     <developers>
