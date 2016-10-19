@@ -5,8 +5,8 @@
   look at https://github.com/zcjava/netty_apps/tree/master/chatroom
 
 # Other package to maven centre command 
-* snapshot 
+* snapshot  
     mvn release:prepare
-* release 
+* release    
     mvn clean deploy -P release -Dgpg.passphrase=xxxx
 
