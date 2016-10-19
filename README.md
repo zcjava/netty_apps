@@ -6,7 +6,7 @@
 
 # Other package to maven centre command 
 * snapshot  
-    mvn release:prepare
-* release    
-    mvn clean deploy -P release -Dgpg.passphrase=xxxx
+  `mvn release:prepare`  
+* release   
+  `mvn clean deploy -P release -Dgpg.passphrase=xxxx`   
 
