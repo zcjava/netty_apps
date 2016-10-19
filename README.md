@@ -1,8 +1,10 @@
 # Intro
   some applications of based on netty.
 
-# package to maven centre command 
+# chatroom
+  look at https://github.com/zcjava/netty_apps/tree/master/chatroom
 
+# Other package to maven centre command 
 * snapshot 
     `mvn release:prepare`
 * release 
