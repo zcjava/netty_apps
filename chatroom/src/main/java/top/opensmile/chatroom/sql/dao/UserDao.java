@@ -23,43 +23,60 @@ public class UserDao {
 
     private static int num = 1;
 
-    public static void insert(UserDomain userDomain) throws SQLException {
-        if (userDomain == null) return ;
+    public static int insert(UserDomain userDomain) throws SQLException {
+        if (userDomain == null || userDomain.getName() == null || userDomain.getName().trim().equals("")) return 0;
         Connection connection = H2SqlService.connectionThreadLocal.get();
         Statement statement = connection.createStatement();
-        StringBuffer sb = new StringBuffer("insert into userinfo(id,name,macadd,passwd,ip) values(");
-        sb.append(num);
-        sb.append(",'" + userDomain.getName() + "'");
+        ResultSet resultSet = statement.executeQuery("select * from userinfo where name ='" + userDomain.getName() + "'");
+        // exist username
+        if(resultSet.next()){
+            return -1;
+        }
+        StringBuffer sb = new StringBuffer("insert into userinfo(name,macadd,passwd,ip) values(");
+        sb.append("'" + userDomain.getName() + "'");
         sb.append(",'" + userDomain.getMacadd() + "'");
         sb.append(",'" + userDomain.getPasswd() + "'");
         sb.append(",'" + userDomain.getIp() + "'");
         sb.append(")");
-        logger.info("UserDao insert sql :"+sb.toString());
+        logger.info("insert sql :"+sb.toString());
         statement.execute(sb.toString());
         num++;
         connection.commit();
+        return 1;
     }
 
     public static ResultSet query(String querySql) throws SQLException {
+        logger.info("query sql "+querySql);
         Connection connection = H2SqlService.connectionThreadLocal.get();
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(querySql);
         return resultSet;
     }
 
-    public static UserDomain queryByIp(String ip) throws SQLException {
-        String queryByipSql = "select * from userinfo where ip ='" + ip + "'";
-        ResultSet rs = query(queryByipSql);
-        if(rs.getFetchSize() == 0 ){
-            return null;
+    public static boolean queryLogin(String username,String password) throws SQLException{
+        logger.info("queryLogin username "+username +" password "+password);
+        String sql = "select * from userinfo where name='"+username+"' and passwd='"+password+"'";
+        ResultSet rs = query(sql);
+        if(rs.next()){
+            return true;
         }
-        UserDomain userDomain = new UserDomain();
-        userDomain.setId(rs.getInt(0));
-        userDomain.setName(rs.getString(1));
-        userDomain.setMacadd(rs.getString(2));
-        userDomain.setPasswd(rs.getString(3));
-        userDomain.setIp(rs.getString(4));
-        return userDomain;
+        return false;
+    }
+
+    public static UserDomain queryByIp(String ip) throws SQLException {
+        logger.info("queryByIp "+ip);
+        String queryByipSql = "select * from userinfo where ip ='"+ip+"' order by id desc limit 1";
+        ResultSet rs = query(queryByipSql);
+        if(rs.next()){
+            UserDomain userDomain = new UserDomain();
+            userDomain.setId(rs.getInt(1));
+            userDomain.setName(rs.getString(2));
+            userDomain.setMacadd(rs.getString(3));
+            userDomain.setPasswd(rs.getString(4));
+            userDomain.setIp(rs.getString(5));
+            return userDomain;
+        }
+        return null;
     }
 
 }

@@ -32,4 +32,29 @@ public class Utils {
         }
     }
 
+    /**
+     * 传进来的 包含Ip字符串，通过正则表达式得到ip
+     *  @param ipstr
+     * @return
+     */
+    public static String getIpFromIpstrByPattern(String ipstr) {
+        String p_str = "(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})";
+        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(p_str);
+        java.util.regex.Matcher matcher = pattern.matcher(ipstr);
+        if(matcher.find()) {
+            String ip = matcher.group();
+            return ip;
+        }
+        return "";
+    }
+
+    public static String[] splitStr(String content,String symbol) {
+        String[] array = content.split(symbol);
+        return array;
+    }
+
+    public static String[] splitStr(String content) {
+        return splitStr(content, "&");
+    }
+
 }

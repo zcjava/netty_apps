@@ -24,4 +24,8 @@ public class UtilsTest extends BaseTest{
         Assert.assertEquals("TheCharToEnd error",Utils.subStrByTheChar(ORIGINAL,"T",Boolean.TRUE),"");
     }
 
+    @Test public void TestGetIpFromIpstrByPattern() {
+        String ip = Utils.getIpFromIpstrByPattern("sdfas111./111.2.2.3:333sdfasd");
+        Assert.assertEquals("ip incorrent",ip,"111.2.2.3");
+    }
 }

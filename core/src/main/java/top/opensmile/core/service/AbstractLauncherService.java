@@ -8,14 +8,28 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by opensmile on 16/8/17.
  */
 public abstract class AbstractLauncherService {
 
+    private static Logger logger = LoggerFactory.getLogger(AbstractLauncherService.class);
+
     public AbstractLauncherService(){
-        this(DEFAULT_PORT);
+        port = DEFAULT_PORT;
+        String _port = System.getProperty("server.port");
+        logger.info("start port "+port);
+        if(_port != null && !"".equals(_port) ){
+            try {
+                port = Integer.parseInt(_port);
+            } catch (NumberFormatException e) {
+                logger.info("param : server port invalid "+port);
+            }
+        }
+        logger.info("start port "+port);
     }
 
     public AbstractLauncherService(int _port){

@@ -16,6 +16,8 @@
 
     <artifactId>common</artifactId>
 
+    <name>netty app common</name>
+
     <dependencies>
         <dependency>
             <groupId>top.opensmile</groupId>

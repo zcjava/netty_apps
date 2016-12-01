@@ -1,0 +1,329 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="text/javascript" src="jquery.js"></script>
+    <style type="text/css">
+        div {
+            border: 1px solid black;
+            vertical-align: middle;
+        }
+        
+        body {
+            height: 100%;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .mask-div {
+            display: none;
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            width: 100%;
+            height: 102%;
+            background-color: black;
+            z-index: 1001;
+            opacity: 0.50;
+            filter: alpha(opacity=80);
+        }
+        
+        .login-div {
+            width: 500px;
+            height: 300px;
+            background-color: #fff;
+            margin: 120px 32%;
+            position: absolute;
+            z-index: 1002;
+        }
+        
+        .close1 {
+            width: 20px;
+            height: 20px;
+            border: none;
+            float: right;
+        }
+        
+        .clear {
+            border: none;
+            clear: both;
+        }
+        
+        input {
+            display: block;
+            line-height: 35px;
+            margin-bottom: 10px;
+            width: 250px;
+        }
+        
+        .sub-btn {
+            width: 90px;
+            height: 30px;
+            background-color: #266dff;
+            color: #fff;
+        }
+        
+        .login-bottom {
+            border: none;
+            margin-top: -10px;
+        }
+        
+        .login-bottom ul {
+            float: right;
+            position: absolute;
+            right: 20px;
+        }
+        
+        .login-bottom ul li {
+            list-style: none;
+            float: left;
+            margin-right: 10px;
+            color: #266dff;
+        }
+        
+        .login-bottom ul li a {
+            text-decoration: none;
+            color: #266dff;
+        }
+        
+        .login-bottom ul li a:hover,
+        .sub-btn:hover {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="top" style="height:20px;">
+        Wellcome to opensmile Chatroom
+    </div>
+    <div id="middle">
+        <textarea id="content" style="height:100%;width:80%;"></textarea>
+    </div>
+    <div id="buttom" style="height:100px;">
+        <div style="width:60%;border:0px;position:relative;margin:auto;">
+            <textarea id="say" rows="4" cols="100" style="margin-top:15px;"></textarea>
+            <button type="button" style="height:30px;position:absolute;right:-5px;bottom:0px;"
+                onclick="send();">Enter</button>
+        </div>
+        <button type="button" id="ClickMe">点击显示</button>
+    </div>
+
+    <div id="login_action" class="mask-div">
+        <div class="login-div">
+            <div class="close1">
+                <a href="javascript:void(0)" id="close-btn"><img style="width:15px;" alt="" src="images/close.gif" /></a>
+            </div>
+            <div class="clear"></div>
+            <div style="border:none;height:95px; margin:60px 120px;">
+                <input type="text" id="username" placeholder="username" />
+                <input type="password" id="password" placeholder="password" />
+                <button id="login_sub" type="submit" class="sub-btn">登录</button>
+            </div>
+
+            <div class="login-bottom">
+                <ul>
+                    <li><a id="showreg">注册</a></li>
+                </ul>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+    <div id="reg_action" class="mask-div">
+        <div class="login-div">
+            <div class="close1">
+                <a href="javascript:void(0)"><img style="width:15px;" alt="" src="images/close.gif" /></a>
+            </div>
+            <div class="clear"></div>
+            <div style="border:none;height:95px; margin:60px 120px;">
+                <input type="text" id="regname" placeholder="username" />
+                <input type="text" id="regpwd" placeholder="password" />
+                <input type="text" id="regrepeatpwd" placeholder="repeat password" />
+                <button id="reg_sub" type="submit" class="sub-btn">注册</button>
+            </div>
+            <div class="login-bottom">
+                <ul>
+                    <li><a id="showlogin">登录</a></li>
+                </ul>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        setMidHeight();
+
+        function setMidHeight()
+        {
+            var h = document.body.offsetHeight - document.getElementById(
+                    "top").offsetHeight - document.getElementById("buttom").offsetHeight -
+                4;
+            document.getElementById("middle").style.height = h + "px";
+        }
+        window.onresize = function()
+        {
+            setMidHeight()
+        };
+        var token;
+        var content = document.getElementById("content");
+        window.WebSocket = window.WebSocket || window.MozWebSocket;
+        if (!window.WebSocket)
+        {
+            alert("WebSocket not supported by this browser");
+        };
+        var ws = new WebSocket("ws://127.0.0.1:9000/");
+        ws.onopen = function(evt)
+        {
+            console.log("websocket connection...");
+            $('#login_action').show();
+        }
+        ws.onmessage = function(evt)
+        {
+            var data = evt.data;
+            var obj = eval('(' + data + ')');
+            console.log('message code:' + obj.code + '; content:' + obj.message);
+            if (obj.code == 211)
+            {
+                alert("login fail");
+                $('#login_action').show();
+                return;
+            }
+            else if (obj.code == 210)
+            {
+                alert("login success");
+                $('#login_action').hide();
+                token = obj.message;
+                return;
+            }
+            else if (obj.code == 200)
+            {
+                $("#content").append(obj.message + "\n");
+                $('#login_action').hide();
+                return;
+            }
+            else if (obj.code == 220)
+            {
+                $('#reg_action').hide();
+                $('#login_action').show();
+                token = obj.message;
+                alert("register success");
+                return;
+            }
+            else if (obj.code == 222)
+            {
+                $("#regpwd").val();
+                $("#regrepeatpwd").val();
+                alert("two password not the same");
+                return;
+            }
+            else if (obj.code == 223)
+            {
+                $("#regname").val();
+                $("#regpwd").val();
+                $("#regrepeatpwd").val();
+                alert("register's name already exist");
+                return;
+            }
+            else if (obj.code == 229)
+            {
+                $("#regname").val();
+                $("#regpwd").val();
+                $("#regrepeatpwd").val();
+                alert("register other exception");
+                return;
+            }
+            else if (obj.code == 241)
+            {
+                alert("token invalid");
+                $("#login_action").show();
+            }
+            else
+            {
+                alert("other error");
+            }
+        }
+
+        function send()
+        {
+            var say_text = $("#say").val();
+            if (say_text != '' && say_text != null && typeof(say_text) !=
+                'undefined')
+            {
+                var mes = "{'code':10,'token':'" + token + "','message':'" +
+                    say_text + "'}";
+                ws.send(mes);
+            }
+            $("#say").val('');
+        }
+
+        $("#showreg").on('click', function()
+        {
+            $("#login_action").hide();
+            $("#reg_action").show();
+        });
+
+        $("#showlogin").on('click', function()
+        {
+            $("#reg_action").hide();
+            $("#login_action").show();
+        });
+
+        $("#reg_sub").on('click', function()
+        {
+            if ($("#regname").val() == '')
+            {
+                alert("register must be not null");
+                return false;
+            }
+            if ($("#regpwd").val() == '')
+            {
+                alert("password must be not null");
+                return false;
+            }
+            if ($("#regrepeatpwd").val() == '')
+            {
+                alert("repeat password must be not null");
+                return false;
+            }
+            if ($("#regrepeatpwd").val() != $("#regpwd").val())
+            {
+                alert("two password not the same");
+                return false;
+            }
+            var mes = "{'code':2,'message':'" + $("#regname").val() +
+                "&" + $("#regpwd").val() + "&" + $("#regpwd").val() +
+                "'}";
+            ws.send(mes);
+        });
+
+        $("#login_sub").on('click', function()
+        {
+            if ($("#username").val() == '')
+            {
+                alert("username must be not null");
+                return false;
+            }
+            if ($("#password").val() == '')
+            {
+                alert("password must be not null");
+                return false;
+            }
+            var mes = "{'code':1,'message':'" + $("#username").val() +
+                "&" + $("#password").val() + "'}";
+            ws.send(mes);
+        });
+    </script>
+    <script>
+        $(function()
+        {
+            $('#ClickMe').click(function()
+            {
+                $('#login_action').show();
+            });
+        })
+    </script>
+</body>
+
+</html>

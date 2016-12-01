@@ -7,7 +7,10 @@
     <groupId>top.opensmile</groupId>
     <artifactId>parent</artifactId>
     <version>1.1</version>
+
     <packaging>pom</packaging>
+
+    <name>netty app</name>
 
     <modules>
         <module>core</module>
@@ -16,7 +19,7 @@
     </modules>
 
     <properties>
-        <netty.version>4.0.23.Final</netty.version>
+        <netty.version>4.1.1.Final</netty.version>
         <junit.version>4.12</junit.version>
         <logback.version>1.1.7</logback.version>
     </properties>
@@ -87,7 +90,6 @@
 
     <build>
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

@@ -27,7 +27,8 @@ public class H2SqlService {
             logger.debug("connectionThreadLocal initialValue()");
             try {
                 Class.forName("org.h2.Driver");
-                return DriverManager.getConnection("jdbc:h2:~/test", "sa", "");
+                    return DriverManager.getConnection("jdbc:h2:~/chatroom;init=runscript from '~/create.sql'","sa","");
+//                return DriverManager.getConnection("jdbc:h2:mem:chatroom;");
             } catch (ClassNotFoundException e) {
                 logger.error("initialValue()",e);
                 e.printStackTrace();
