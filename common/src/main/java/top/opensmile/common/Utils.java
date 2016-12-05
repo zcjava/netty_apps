@@ -57,4 +57,17 @@ public class Utils {
         return splitStr(content, "&");
     }
 
+    /**
+     * 获取项目物理路径
+     * if 在生产环境中，使用startup.sh启动项目，需要java启动加上-Dproject.path的参数
+     * if 在开发环境中，使用的类的
+     * @return
+     */
+    public static String getProjectAbsolutePath(){
+        String ppath = System.getProperty("project.path");
+        if(ppath == null || "".equals(ppath)){
+            return Utils.class.getResource("/").getPath().toString();
+        }
+        return ppath;
+    }
 }
