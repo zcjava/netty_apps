@@ -63,11 +63,19 @@ public class Utils {
      * if 在开发环境中，使用的类的
      * @return
      */
-    public static String getProjectAbsolutePath(){
+    public static String getProjectResourcesPath(){
         String ppath = System.getProperty("project.path");
         if(ppath == null || "".equals(ppath)){
+            DEBUG_MODEL = true;
             return Utils.class.getResource("/").getPath().toString();
         }
         return ppath;
     }
+
+    private static boolean DEBUG_MODEL = false ;
+
+    public static boolean isDebugModel(){
+        return DEBUG_MODEL;
+    }
+    public static final String RESOURCE_PATH = getProjectResourcesPath();
 }

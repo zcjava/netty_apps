@@ -7,6 +7,8 @@ PROJECT=chatroom
 cd `dirname $0`
 
 PROJECT_PATH=$(pwd)"/../"
+echo "project path :"$PROJECT_PATH
+exit 0
 FPID=pid
 PID=0
 

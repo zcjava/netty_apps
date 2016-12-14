@@ -69,7 +69,7 @@ public class WebSocketFrameHandler extends SimpleChannelInboundHandler<WebSocket
                 int code =211;
                 String token = "";
                 if(UserDao.queryLogin(username, contents[1])){
-                    code  = 210;
+                    code = 210;
                     // token = uuid + username
                     token = UUID.randomUUID().toString()+"&"+username;
                     CONTEXT_TOKEN_MAP.put(channelHandlerContext,token);

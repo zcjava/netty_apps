@@ -6,7 +6,7 @@ package top.opensmile.chatroom.sql.dao;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import top.opensmile.core.sql.H2SqlService;
+import top.opensmile.common.sql.H2SqlService;
 import top.opensmile.chatroom.sql.pristence.UserDomain;
 
 import java.sql.Connection;
